@@ -17,16 +17,22 @@ mongoose.set('strictQuery', true);
 app.use(express.json())
 app.use(cors())
 
+// Root route
+app.get("/", (req, res) => {
+    res.json({ message: "Welcome to Todo App API" });
+});
+
 //db config
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
-}, (err) => {
-    if (err) {
-        console.log(err)
-    } else {
-        console.log("DB Connected")
-    }
+    useUnifiedTopology: true
 })
+.then(() => {
+    console.log("Successfully connected to MongoDB.");
+})
+.catch((error) => {
+    console.error("Error connecting to MongoDB:", error.message);
+});
 
 //api endpoints
 app.use("/api/user", userRouter)
